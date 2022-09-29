@@ -4,7 +4,7 @@ DATE=$(date +%Y-%m-%d)
 routersjson="./router-2102.json"
 templatefolder="template/"
 customfolder="custom/"
-	
+
 buldimage() {
 	image=$1
 	flag=$2
@@ -15,7 +15,7 @@ buldimage() {
 	echo "$LIST" > modellist.txt
 
 	found=0
-	while read  model 
+	while read  model
 	do
 		model_up=$( echo "$model" | tr [a-z] [A-Z])
 		if [ "$image_up" = "$model_up" ]; then
@@ -31,7 +31,7 @@ buldimage() {
 						temp1=$(jshon -e "$model_up" -e image  < $routersjson)
 						temp="${temp1%\"}"
 						model_image="${temp#\"}"
-						
+
 						temp1=$(jshon -e "$model_up" -e ext  < $routersjson)
 						temp="${temp1%\"}"
 						model_ext="${temp#\"}"
@@ -43,7 +43,7 @@ buldimage() {
 						temp1=$(jshon -e "$model_up" -e image2  < $routersjson)
 						temp="${temp1%\"}"
 						model_image2="${temp#\"}"
-						
+
 						temp1=$(jshon -e "$model_up" -e ext1  < $routersjson)
 						temp="${temp1%\"}"
 						model_ext1="${temp#\"}"
@@ -64,7 +64,7 @@ buldimage() {
 						temp1=$(jshon -e "$model_up" -e image4  < $routersjson)
 						temp="${temp1%\"}"
 						model_image4="${temp#\"}"
-						
+
 						temp1=$(jshon -e "$model_up" -e ext1  < $routersjson)
 						temp="${temp1%\"}"
 						model_ext1="${temp#\"}"
@@ -81,28 +81,28 @@ buldimage() {
 						model_image2="${temp#\"}"
 					;;
 				esac
-				
+
 				temp1=$(jshon -e "$model_up" -e config  < $routersjson)
 				temp="${temp1%\"}"
 				model_config="${temp#\"}"
-				
+
 				temp1=$(jshon -e "$model_up" -e imagepath  < $routersjson)
 				temp="${temp1%\"}"
 				model_imagepath="${temp#\"}"
 				model_imagepath=$(echo $model_imagepath | sed 's!\\!!g')
-				
+
 				temp1=$(jshon -e "$model_up" -e mod  < $routersjson)
 				temp="${temp1%\"}"
 				model_mod="${temp#\"}"
-				
+
 				model_build=""
 				fnd=$(echo "$model_list" | grep "package")
 				if [ ! -z "$fnd" ]; then
 					temp1=$(jshon -e "$model_up" -e package  < $routersjson)
 					temp="${temp1%\"}"
 					model_build="${temp#\"}"
-				fi			
-				
+				fi
+
 				model_addons=""
 				fnd=$(echo "$model_list" | grep "addons")
 				if [ ! -z "$fnd" ]; then
@@ -141,7 +141,7 @@ buldimage() {
 				model_material=""
 				model_argon=""
 				model_tomato=""
-				
+
 				fnd=$(echo "$model_list" | grep "flash")
 				if [ ! -z "$fnd" ]; then
 					temp1=$(jshon -e "$model_up" -e flash  < $routersjson)
@@ -169,7 +169,7 @@ buldimage() {
 							model_hostname="${temp#\"}"
 						fi
 					fi
-					
+
 					fnd=$(echo "$cust_list" | grep "wifi")
 					if [ ! -z "$fnd" ]; then
 						x_list=$(jshon -e "$model_up" -e custom -e wifi -k < $routersjson)
@@ -192,7 +192,7 @@ buldimage() {
 							model_password="${temp#\"}"
 						fi
 					fi
-					
+
 					fnd=$(echo "$cust_list" | grep "image")
 					if [ ! -z "$fnd" ]; then
 						x_list=$(jshon -e "$model_up" -e custom -e image -k < $routersjson)
@@ -281,13 +281,13 @@ buldimage() {
 		if [ ! -z $WPAD ]; then
 			sed -i -e 's/CONFIG_PACKAGE_wpad=y/# CONFIG_PACKAGE_wpad is not set/g' ./.config
 		fi
-		
+
 		WGET=$(cat "./.config" | grep "CONFIG_PACKAGE_wget ")
 		if [ ! -z "$WGET" ]; then
 			WGET=$(cat "./.config" | grep "# CONFIG_PACKAGE_wget is not set")
 			if [ ! -z "$WGET" ]; then
 				sed -i -e 's/# CONFIG_PACKAGE_wget is not set/CONFIG_PACKAGE_wget=y/g' ./.config
-				make defconfig
+				make -j4 defconfig
 			fi
 		fi
 
@@ -393,9 +393,9 @@ buldimage() {
 			fi
 			cp ./configfiles/$m_config ./.config
 			# edit and exit
-			make menuconfig
+			make -j4 menuconfig
 			if [ -e ./.config ]; then
-				cp ./.config ./configfiles/$m_config 
+				cp ./.config ./configfiles/$m_config
 			fi
 			exit 0
 		else
@@ -406,12 +406,12 @@ buldimage() {
 				fi
 				cp ./configfiles/$m_config ./.config
 				# edit
-				make menuconfig
+				make -j4 menuconfig
 				if [ -e ./.config ]; then
-					cp ./.config ./configfiles/$m_config 
+					cp ./.config ./configfiles/$m_config
 				else
 					exit 0
-				fi 
+				fi
 			else
 				if [ $flag = "-b" ]; then
 					m_config=$customfolder".config_"$cconfig
@@ -447,9 +447,9 @@ buldimage() {
 					sed -i -e "s/# CONFIG_PACKAGE_$model_build is not set/CONFIG_PACKAGE_$model_build=y/g" ./.config
 				fi
 			fi
-			make defconfig
+			make -j4 defconfig
 			configfix
-			make V=s
+			make -j4 V=s
 			cp ./bin/targets$model_imagepath$model_image ./images/$model_mod$END$model_ext
 			EX=$?
 			if [ $EX -ne 0 ]; then
@@ -467,9 +467,9 @@ buldimage() {
 					if [ $m_config = $templatefolder$model_config ]; then
 						cp ./configfiles/$m_config ./.config
 						sed -i -e 's/# CONFIG_PACKAGE_ext-rooter16 is not set/CONFIG_PACKAGE_ext-rooter16=y/g' ./.config
-						make defconfig
+						make -j4 defconfig
 						configfix
-						make V=s
+						make -j4 V=s
 						cp ./bin/targets$model_imagepath$model_image ./images/$model_mod"-full"$END$model_ext
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -489,9 +489,9 @@ buldimage() {
 					if [ ! -z "$sb" ]; then
 						model_build16=$model_build"16"
 						sed -i -e "s/# CONFIG_PACKAGE_$model_build16 is not set/CONFIG_PACKAGE_$model_build16=y/g" ./.config
-						make defconfig
+						make -j4 defconfig
 						configfix
-						make V=s
+						make -j4 V=s
 						cp ./bin/targets$model_imagepath$model_image ./images/$model_mod"-full"$END$model_ext
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -519,9 +519,9 @@ buldimage() {
 					sed -i -e "s/# CONFIG_PACKAGE_$model_build is not set/CONFIG_PACKAGE_$model_build=y/g" ./.config
 				fi
 			fi
-			make defconfig
+			make -j4 defconfig
 			configfix
-			make V=s
+			make -j4 V=s
 			cp ./bin/targets$model_imagepath$model_image1 ./images/$model_mod$END$model_ext1
 			EX=$?
 			if [ $EX -ne 0 ]; then
@@ -546,9 +546,9 @@ buldimage() {
 					if [ $m_config = $templatefolder$model_config ]; then
 						cp ./configfiles/$m_config ./.config
 						sed -i -e 's/# CONFIG_PACKAGE_ext-rooter16 is not set/CONFIG_PACKAGE_ext-rooter16=y/g' ./.config
-						make defconfig
+						make -j4 defconfig
 						configfix
-						make V=s
+						make -j4 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_mod"-full"$END$model_ext1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -562,7 +562,7 @@ buldimage() {
 							exit $EX
 						fi
 						cd ./images
-						zip $zippassword$model_mod$END.zip $model_mod"-full"$END$model_ext1 $model_mod"-full"$END$model_ext2 
+						zip $zippassword$model_mod$END.zip $model_mod"-full"$END$model_ext1 $model_mod"-full"$END$model_ext2
 						rm -f $model_mod"-full"$END$model_ext1
 						rm -f $model_mod"-full"$END$model_ext2
 						cd ..
@@ -575,9 +575,9 @@ buldimage() {
 					if [ ! -z "$sb" ]; then
 						model_build16=$model_build"16"
 						sed -i -e "s/# CONFIG_PACKAGE_$model_build16 is not set/CONFIG_PACKAGE_$model_build16=y/g" ./.config
-						make defconfig
+						make -j4 defconfig
 						configfix
-						make V=s
+						make -j4 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_mod"-full"$END$model_ext1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -591,12 +591,12 @@ buldimage() {
 							exit $EX
 						fi
 						cd ./images
-						zip $zippassword$model_mod$END.zip $model_mod"-full"$END$model_ext1 $model_mod"-full"$END$model_ext2 
+						zip $zippassword$model_mod$END.zip $model_mod"-full"$END$model_ext1 $model_mod"-full"$END$model_ext2
 						rm -f $model_mod"-full"$END$model_ext1
 						rm -f $model_mod"-full"$END$model_ext2
 						cd ..
 					fi
-				fi	
+				fi
 			fi
 		;;
 		"3" )
@@ -612,9 +612,9 @@ buldimage() {
 					sed -i -e "s/# CONFIG_PACKAGE_$model_build is not set/CONFIG_PACKAGE_$model_build=y/g" ./.config
 				fi
 			fi
-			make defconfig
+			make -j4 defconfig
 			configfix
-			make V=s
+			make -j4 V=s
 			cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 			EX=$?
 			if [ $EX -ne 0 ]; then
@@ -643,9 +643,9 @@ buldimage() {
 					if [ $m_config = $templatefolder$model_config ]; then
 						cp ./configfiles/$m_config ./.config
 						sed -i -e 's/# CONFIG_PACKAGE_ext-rooter16 is not set/CONFIG_PACKAGE_ext-rooter16=y/g' ./.config
-						make defconfig
+						make -j4 defconfig
 						configfix
-						make V=s
+						make -j4 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -663,7 +663,7 @@ buldimage() {
 						mv $model_image2 $model_mod"-full"$END$model_ext1
 						gunzip $model_image3
 						mv $model_image4 $model_mod"-full"$END$model_ext2
-						zip -r $zippassword $model_mod$END.zip $model_mod"-full"$END$model_ext1 $model_mod"-full"$END$model_ext2 
+						zip -r $zippassword $model_mod$END.zip $model_mod"-full"$END$model_ext1 $model_mod"-full"$END$model_ext2
 						rm -f $model_mod"-full"$END$model_ext1
 						rm -f $model_mod"-full"$END$model_ext2
 						cd ..
@@ -676,9 +676,9 @@ buldimage() {
 					if [ ! -z "$sb" ]; then
 						model_build16=$model_build"16"
 						sed -i -e "s/# CONFIG_PACKAGE_$model_build16 is not set/CONFIG_PACKAGE_$model_build16=y/g" ./.config
-						make defconfig
+						make -j4 defconfig
 						configfix
-						make V=s
+						make -j4 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -696,7 +696,7 @@ buldimage() {
 						mv $model_image2 $model_mod"-full"$END$model_ext1
 						gunzip $model_image3
 						mv $model_image4 $model_mod"-full"$END$model_ext2
-						zip -r $zippassword $model_mod$END.zip $model_mod"-full"$END$model_ext1 $model_mod"-full"$END$model_ext2 
+						zip -r $zippassword $model_mod$END.zip $model_mod"-full"$END$model_ext1 $model_mod"-full"$END$model_ext2
 						rm -f $model_mod"-full"$END$model_ext1
 						rm -f $model_mod"-full"$END$model_ext2
 						cd ..
@@ -717,9 +717,9 @@ buldimage() {
 					sed -i -e "s/# CONFIG_PACKAGE_$model_build is not set/CONFIG_PACKAGE_$model_build=y/g" ./.config
 				fi
 			fi
-			make defconfig
+			make -j4 defconfig
 			configfix
-			make V=s
+			make -j4 V=s
 			cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 			EX=$?
 			if [ $EX -ne 0 ]; then
@@ -740,9 +740,9 @@ buldimage() {
 					if [ $m_config = $templatefolder$model_config ]; then
 						cp ./configfiles/$m_config ./.config
 						sed -i -e 's/# CONFIG_PACKAGE_ext-rooter16 is not set/CONFIG_PACKAGE_ext-rooter16=y/g' ./.config
-						make defconfig
+						make -j4 defconfig
 						configfix
-						make V=s
+						make -j4 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -752,7 +752,7 @@ buldimage() {
 						cd ./images
 						gunzip $model_image1
 						mv $model_image2 $model_mod"-full"$END"-ext4.img"
-						zip -r $zippassword $model_mod$END.zip $model_mod"-full"$END"-ext4.img" 
+						zip -r $zippassword $model_mod$END.zip $model_mod"-full"$END"-ext4.img"
 						rm -f $model_mod"-full"$END"-ext4.img"
 						rm -f $model_imagepath$model_image1
 						cd ..
@@ -765,9 +765,9 @@ buldimage() {
 					if [ ! -z "$sb" ]; then
 						model_build16=$model_build"16"
 						sed -i -e "s/# CONFIG_PACKAGE_$model_build16 is not set/CONFIG_PACKAGE_$model_build16=y/g" ./.config
-						make defconfig
+						make -j4 defconfig
 						configfix
-						make V=s
+						make -j4 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -777,7 +777,7 @@ buldimage() {
 						cd ./images
 						gunzip $model_image1
 						mv $model_image2 $model_mod"-full"$END"-ext4.img"
-						zip -r $zippassword $model_mod$END.zip $model_mod"-full"$END"-ext4.img" 
+						zip -r $zippassword $model_mod$END.zip $model_mod"-full"$END"-ext4.img"
 						rm -f $model_mod"-full"$END"-ext4.img"
 						rm -f $model_imagepath$model_image1
 						cd ..
@@ -799,7 +799,7 @@ else
 		LIST=$(jshon -k < $routersjson)
 		echo "$LIST" > alllist.txt
 		while read L1
-		do	
+		do
 			if [ -z $start ]; then
 		  		buldimage "$L1"
 			else
@@ -840,4 +840,3 @@ else
 		fi
 	fi
 fi
-
