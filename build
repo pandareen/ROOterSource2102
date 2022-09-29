@@ -287,7 +287,7 @@ buldimage() {
 			WGET=$(cat "./.config" | grep "# CONFIG_PACKAGE_wget is not set")
 			if [ ! -z "$WGET" ]; then
 				sed -i -e 's/# CONFIG_PACKAGE_wget is not set/CONFIG_PACKAGE_wget=y/g' ./.config
-				make -j4 defconfig
+				make -j2 defconfig
 			fi
 		fi
 
@@ -393,7 +393,7 @@ buldimage() {
 			fi
 			cp ./configfiles/$m_config ./.config
 			# edit and exit
-			make -j4 menuconfig
+			make -j2 menuconfig
 			if [ -e ./.config ]; then
 				cp ./.config ./configfiles/$m_config
 			fi
@@ -406,7 +406,7 @@ buldimage() {
 				fi
 				cp ./configfiles/$m_config ./.config
 				# edit
-				make -j4 menuconfig
+				make -j2 menuconfig
 				if [ -e ./.config ]; then
 					cp ./.config ./configfiles/$m_config
 				else
@@ -447,9 +447,9 @@ buldimage() {
 					sed -i -e "s/# CONFIG_PACKAGE_$model_build is not set/CONFIG_PACKAGE_$model_build=y/g" ./.config
 				fi
 			fi
-			make -j4 defconfig
+			make -j2 defconfig
 			configfix
-			make -j4 V=s
+			make -j2 V=s
 			cp ./bin/targets$model_imagepath$model_image ./images/$model_mod$END$model_ext
 			EX=$?
 			if [ $EX -ne 0 ]; then
@@ -467,9 +467,9 @@ buldimage() {
 					if [ $m_config = $templatefolder$model_config ]; then
 						cp ./configfiles/$m_config ./.config
 						sed -i -e 's/# CONFIG_PACKAGE_ext-rooter16 is not set/CONFIG_PACKAGE_ext-rooter16=y/g' ./.config
-						make -j4 defconfig
+						make -j2 defconfig
 						configfix
-						make -j4 V=s
+						make -j2 V=s
 						cp ./bin/targets$model_imagepath$model_image ./images/$model_mod"-full"$END$model_ext
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -489,9 +489,9 @@ buldimage() {
 					if [ ! -z "$sb" ]; then
 						model_build16=$model_build"16"
 						sed -i -e "s/# CONFIG_PACKAGE_$model_build16 is not set/CONFIG_PACKAGE_$model_build16=y/g" ./.config
-						make -j4 defconfig
+						make -j2 defconfig
 						configfix
-						make -j4 V=s
+						make -j2 V=s
 						cp ./bin/targets$model_imagepath$model_image ./images/$model_mod"-full"$END$model_ext
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -519,9 +519,9 @@ buldimage() {
 					sed -i -e "s/# CONFIG_PACKAGE_$model_build is not set/CONFIG_PACKAGE_$model_build=y/g" ./.config
 				fi
 			fi
-			make -j4 defconfig
+			make -j2 defconfig
 			configfix
-			make -j4 V=s
+			make -j2 V=s
 			cp ./bin/targets$model_imagepath$model_image1 ./images/$model_mod$END$model_ext1
 			EX=$?
 			if [ $EX -ne 0 ]; then
@@ -546,9 +546,9 @@ buldimage() {
 					if [ $m_config = $templatefolder$model_config ]; then
 						cp ./configfiles/$m_config ./.config
 						sed -i -e 's/# CONFIG_PACKAGE_ext-rooter16 is not set/CONFIG_PACKAGE_ext-rooter16=y/g' ./.config
-						make -j4 defconfig
+						make -j2 defconfig
 						configfix
-						make -j4 V=s
+						make -j2 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_mod"-full"$END$model_ext1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -575,9 +575,9 @@ buldimage() {
 					if [ ! -z "$sb" ]; then
 						model_build16=$model_build"16"
 						sed -i -e "s/# CONFIG_PACKAGE_$model_build16 is not set/CONFIG_PACKAGE_$model_build16=y/g" ./.config
-						make -j4 defconfig
+						make -j2 defconfig
 						configfix
-						make -j4 V=s
+						make -j2 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_mod"-full"$END$model_ext1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -612,9 +612,9 @@ buldimage() {
 					sed -i -e "s/# CONFIG_PACKAGE_$model_build is not set/CONFIG_PACKAGE_$model_build=y/g" ./.config
 				fi
 			fi
-			make -j4 defconfig
+			make -j2 defconfig
 			configfix
-			make -j4 V=s
+			make -j2 V=s
 			cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 			EX=$?
 			if [ $EX -ne 0 ]; then
@@ -643,9 +643,9 @@ buldimage() {
 					if [ $m_config = $templatefolder$model_config ]; then
 						cp ./configfiles/$m_config ./.config
 						sed -i -e 's/# CONFIG_PACKAGE_ext-rooter16 is not set/CONFIG_PACKAGE_ext-rooter16=y/g' ./.config
-						make -j4 defconfig
+						make -j2 defconfig
 						configfix
-						make -j4 V=s
+						make -j2 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -676,9 +676,9 @@ buldimage() {
 					if [ ! -z "$sb" ]; then
 						model_build16=$model_build"16"
 						sed -i -e "s/# CONFIG_PACKAGE_$model_build16 is not set/CONFIG_PACKAGE_$model_build16=y/g" ./.config
-						make -j4 defconfig
+						make -j2 defconfig
 						configfix
-						make -j4 V=s
+						make -j2 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -717,9 +717,9 @@ buldimage() {
 					sed -i -e "s/# CONFIG_PACKAGE_$model_build is not set/CONFIG_PACKAGE_$model_build=y/g" ./.config
 				fi
 			fi
-			make -j4 defconfig
+			make -j2 defconfig
 			configfix
-			make -j4 V=s
+			make -j2 V=s
 			cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 			EX=$?
 			if [ $EX -ne 0 ]; then
@@ -740,9 +740,9 @@ buldimage() {
 					if [ $m_config = $templatefolder$model_config ]; then
 						cp ./configfiles/$m_config ./.config
 						sed -i -e 's/# CONFIG_PACKAGE_ext-rooter16 is not set/CONFIG_PACKAGE_ext-rooter16=y/g' ./.config
-						make -j4 defconfig
+						make -j2 defconfig
 						configfix
-						make -j4 V=s
+						make -j2 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 						EX=$?
 						if [ $EX -ne 0 ]; then
@@ -765,9 +765,9 @@ buldimage() {
 					if [ ! -z "$sb" ]; then
 						model_build16=$model_build"16"
 						sed -i -e "s/# CONFIG_PACKAGE_$model_build16 is not set/CONFIG_PACKAGE_$model_build16=y/g" ./.config
-						make -j4 defconfig
+						make -j2 defconfig
 						configfix
-						make -j4 V=s
+						make -j2 V=s
 						cp ./bin/targets$model_imagepath$model_image1 ./images/$model_image1
 						EX=$?
 						if [ $EX -ne 0 ]; then
