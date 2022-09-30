@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "22.03.0" ]
+    branches: [ "22.03.0_" ]
   pull_request:
     branches: [ "22.03.0" ]
 
