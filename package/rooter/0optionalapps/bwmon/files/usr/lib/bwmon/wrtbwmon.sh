@@ -24,7 +24,7 @@ lockDir=/tmp/WRTbmon
 
 ifname="ifname"
 source /etc/openwrt_release
-twone=$(echo "$DISTRIB_RELEASE" | grep "21.02")
+twone=$(echo "$DISTRIB_RELEASE" | grep "22.03")
 if [ ! -z "$twone" ]; then
 	ifname="device"
 fi
