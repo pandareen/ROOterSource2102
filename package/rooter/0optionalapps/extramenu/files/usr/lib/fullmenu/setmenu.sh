@@ -7,7 +7,7 @@ log() {
 
 full=$1
 source /etc/openwrt_release
-twone=$(echo "$DISTRIB_RELEASE" | grep "21.02")
+twone=$(echo "$DISTRIB_RELEASE" | grep "22.03")
 
 if [ $full = "0" ]; then
 	fv="1"
