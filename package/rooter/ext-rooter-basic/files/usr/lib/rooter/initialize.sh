@@ -68,9 +68,9 @@ firstboot() {
 
 	source /etc/openwrt_release
 	if [ $DISTRIB_RELEASE = "SNAPSHOT" ]; then
-		DISTRIB_RELEASE="21.02.2"
+		DISTRIB_RELEASE="22.03.0"
 	fi
-	tone=$(echo "$DISTRIB_RELEASE" | grep "21.02")
+	tone=$(echo "$DISTRIB_RELEASE" | grep "22.03")
 }
 
 if [ -e /tmp/installing ]; then
@@ -96,7 +96,7 @@ uci commit modem
 source /etc/openwrt_release
 rm -f /etc/openwrt_release
 if [ $DISTRIB_RELEASE = "SNAPSHOT" ]; then
-	DISTRIB_RELEASE="21.02.2"
+	DISTRIB_RELEASE="22.03.0"
 fi
 if [ -e /etc/custom ]; then
 	lua $ROOTER/customname.lua
